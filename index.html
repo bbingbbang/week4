@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>과제를 하자</title>
+	<style type="text/css"> 
+		html {cursor: url(cursor.png), auto}
+		body {margin: 0;}
+		.box {width: 200px; height: 120px; position: absolute; background: transparent;} 
+		section {width: 1200px; margin: auto;}
+		div {margin: auto;}
+		img {display: block; margin: auto;}
+		h2 {text-align: center; margin-top: 300px;}
+		.timer {text-align: center; font-size: 24px; margin-top: 20px; color: black;}
+	</style>
+</head> 
+
+<body> 
+<section>
+	<h2 id="clickCount">과제 해치운 횟수: 0</h2>
+		<div style="text-align: center;">
+			<img width="30%" src="1.jpg">
+		</div>
+	<div class="timer" id="timer">남은 시간: 15</div>
+</section>
+
+<script type="text/javascript">
+	var clickCount = 0; // 클릭 횟수를 저장하는 변수
+	var gameDuration = 15; // 게임 지속 시간 (초)
+	var timer; // 타이머 변수
+
+	// 게임 시작 함수
+	function startGame() {
+		clickCount = 0; // 클릭 횟수 초기화
+		updateClickCount(); // 초기 클릭 횟수 업데이트
+		makeBox(); // 박스 생성
+		timer = setInterval(updateTimer, 1000); // 1초마다 타이머 업데이트
+		setTimeout(endGame, gameDuration * 1000); // 게임 종료 타이머 설정
+	}
+
+	// 타이머 업데이트 함수
+	function updateTimer() {
+		var timerElement = document.getElementById("timer");
+		var remainingTime = gameDuration - Math.floor((Date.now() - startTime) / 1000);
+
+		// 3초 이하로 남은 경우 타이머 색상 변경
+		if (remainingTime <= 3) {
+			timerElement.style.color = "red";
+		}
+
+		timerElement.innerText = "남은 시간: " + remainingTime;
+	}
+
+	// 게임 종료 함수
+	function endGame() {
+		clearInterval(timer); // 타이머 종료
+		alert("게임 종료! 과제 해치운 횟수: " + clickCount); // 결과 알림
+	}
+
+	function makeBox() { 
+		var a = document.createElement("img");
+		a.className = "box";
+		a.src = "2.png";
+		var b = Math.random() * (window.innerWidth - 200); // 화면 범위 내에서 랜덤 좌표 생성
+		var c = Math.random() * (window.innerHeight - 142);
+
+		a.style.left = b + "px";
+		a.style.top = c + "px";
+		a.onclick = function (){
+			clickCount++; // 클릭 횟수 증가
+			updateClickCount(); // 클릭 횟수를 업데이트하는 함수 호출
+			a.parentNode.removeChild(a);
+			makeBox();
+		} 
+		document.body.appendChild(a);
+	}
+
+	function updateClickCount() {
+		var clickCountElement = document.getElementById("clickCount");
+		clickCountElement.innerText = "과제 해치운 횟수: " + clickCount; // 화면에 클릭 횟수 업데이트
+	}
+
+	var startTime = Date.now(); // 게임 시작 시간 저장
+
+	// 게임 시작
+	startGame();
+</script>
+</body>
+</html>
